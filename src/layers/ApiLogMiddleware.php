@@ -10,20 +10,41 @@ use VicHaunter\ApiMiddleware\ApiLayer;
 class ApiLogMiddleware extends ApiLayer {
     
     private $enable;
+    private $nameGenerator;
+    private $path = __ROOT__."/temp/data";
     
-    public function __construct( $enable = true ) {
+    public function __construct( callable $nameGenerator = null ) {
+        $this->nameGenerator = $nameGenerator;
+    }
+    
+    /**
+     * @param bool $enable
+     */
+    public function setEnable( bool $enable ): void {
         $this->enable = $enable;
     }
     
+    /**
+     * @param mixed $path
+     */
+    public function setPath( $path ): void {
+        $this->path = $path;
+    }
+    
     public function apiRequest( ApiApplicationRequest $request, Closure $next ) {
-        if ($this->enable) {    
+        if ($this->enable) {
             try {
-                FileSystem::createDir(__ROOTDIR__."/temp/data/");
-                FileSystem::write(__ROOTDIR__."/temp/data/".time().'.json', $request->getParameters(), null);
+                $fileName = time();
+                if ($this->nameGenerator) {
+                    $fileName = $this->nameGenerator($request);
+                }
+                FileSystem::createDir($this->path);
+                FileSystem::write($this->path.'/'.$fileName.'.json', $request->getParameters(), null);
             } catch (\Exception $e) {
                 $request->error = __CLASS__.": ".$e->getMessage();
             }
         }
+        
         return $next($request);
-    }    
+    }
 }

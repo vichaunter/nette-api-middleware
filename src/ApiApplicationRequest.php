@@ -16,7 +16,7 @@ class ApiApplicationRequest {
     
     public function __construct( Request $netteRequest ) {
         $this->netteRequest = $netteRequest;
-        $this->parameters = array_merge($this->netteRequest->getPost(), $this->netteRequest->getParameters());
+        $this->parameters = $this->getOriginalParameters();
     }
     
     public function setResponse( $response ) {
@@ -25,6 +25,13 @@ class ApiApplicationRequest {
     
     public function getResponse() {
         return $this->response;
+    }
+    
+    /**
+     * @return array
+     */
+    public function getOriginalParameters() {
+        return array_merge($this->netteRequest->getPost(), $this->netteRequest->getParameters());
     }
     
     /**
@@ -41,6 +48,10 @@ class ApiApplicationRequest {
      */
     public function getParameter( $name ) {
         return array_key_exists($name, $this->parameters) ? $this->parameters[ $name ] : null;
+    }
+    
+    public function setParameter($key, $value) {
+        $this->parameters[$key] = $value;
     }
     
     /**
