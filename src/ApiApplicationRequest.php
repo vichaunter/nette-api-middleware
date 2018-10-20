@@ -22,11 +22,19 @@ class ApiApplicationRequest {
     public function setResponse( $response ) {
         $this->response = $response;
     }
-    
+
+    public function getError() {
+        return $this->errorMessage;
+    }
+
+    public function getStatusCode() {
+        return $this->statusCode;
+    }
+
     public function getResponse() {
         return $this->response;
     }
-    
+
     /**
      * @return array
      */
