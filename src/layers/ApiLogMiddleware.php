@@ -11,7 +11,7 @@ class ApiLogMiddleware extends ApiLayer {
     
     private $enable = true;
     private $nameGenerator;
-    private $path = __ROOT__."/temp/data";
+    private $path = __ROOTDIR__."/temp/data";
     
     public function __construct( callable $nameGenerator = null ) {
         $this->nameGenerator = $nameGenerator;
