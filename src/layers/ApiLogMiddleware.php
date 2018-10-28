@@ -9,7 +9,7 @@ use VicHaunter\ApiMiddleware\ApiLayer;
 
 class ApiLogMiddleware extends ApiLayer {
     
-    private $enable;
+    private $enable = true;
     private $nameGenerator;
     private $path = __ROOT__."/temp/data";
     
