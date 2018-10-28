@@ -40,6 +40,7 @@ class ApiApplicationRequest {
      */
     public function getOriginalParameters() {
         $jsonRequest = json_decode(file_get_contents('php://input'), true);
+        if(!$jsonRequest) $jsonRequest = [];
         return array_merge($this->netteRequest->getPost(), $this->netteRequest->getParameters(), $jsonRequest);
     }
     
