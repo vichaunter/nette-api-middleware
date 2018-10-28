@@ -48,9 +48,12 @@ class ApiOnionDecorator {
      * @param  mixed   $object
      * @param  Closure $core
      *
-     * @return mixed
+     * @return ApiApplicationRequest
      */
-    public function handle( ApiApplicationRequest $request, Closure $core ) {
+    public function handle( ApiApplicationRequest $request, Closure $core = null ) {
+        if($core == null){
+            $core = function(ApiApplicationRequest $request){return $request; };
+        }
         return $this->onion->handle($request, $core);
     }
 }
