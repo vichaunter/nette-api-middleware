@@ -47,7 +47,7 @@ class ApiApplicationRequest {
     /**
      * @return array
      */
-    public function getParameters() {
+    public function     getParameters() {
         return $this->parameters;
     }
     
