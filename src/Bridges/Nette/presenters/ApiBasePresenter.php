@@ -20,7 +20,6 @@ class ApiBasePresenter implements IPresenter {
     * @return IResponse
     */
    function run( Request $request ) {
-        
         $appRequest = new ApiApplicationRequest($request);
 
         $handler = 'action' . ucfirst( $request->getParameter('action') );

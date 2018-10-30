@@ -4,15 +4,19 @@ namespace VicHaunter\ApiMiddleware;
 
 use Nette\Application\Request;
 
-class ApiApplicationRequest {
+class ApiApplicationRequest implements \JsonSerializable {
     
     /** @var $netteRequest Request */
     private $netteRequest;
+    private $postParameters = [];
+    private $getParameters = [];
+    private $inputStreamParameters = [];
     private $parameters = [];
+
     //Response part
-    public $response = [];
-    public $errorMessage = null;
-    public $statusCode = null;
+    private $response = [];
+    private $errorMessage = null;
+    private $statusCode = null;
     
     public function __construct( Request $netteRequest ) {
         $this->netteRequest = $netteRequest;
@@ -39,15 +43,13 @@ class ApiApplicationRequest {
      * @return array
      */
     public function getOriginalParameters() {
-        $jsonRequest = json_decode(file_get_contents('php://input'), true);
-        if(!$jsonRequest) $jsonRequest = [];
-        return array_merge($this->netteRequest->getPost(), $this->netteRequest->getParameters(), $jsonRequest);
+        return array_merge($this->getGetParameters(), $this->getPostParameters(), $this->getInputStreamParameters());
     }
     
     /**
      * @return array
      */
-    public function     getParameters() {
+    public function getParameters() {
         return $this->parameters;
     }
     
@@ -77,5 +79,44 @@ class ApiApplicationRequest {
         
         return $this;
     }
-    
+
+    public function readPostParameters(){
+        return $this->netteRequest->getPost();
+    }
+
+    public function readGetParameters(){
+        return $this->netteRequest->getParameters();
+    }
+
+    public function readInputStreamParameters(){
+        if(array_key_exists('CONTENT_TYPE', $_SERVER) && $_SERVER["CONTENT_TYPE"] === 'application/json'){
+            $inputStream = file_get_contents('php://input');
+            $this->inputStreamParameters = json_decode($inputStream, true);
+        }
+        return $this->inputStreamParameters ? $this->inputStreamParameters : [];
+    }
+
+
+    public function getPostParameters(){
+        if(!$this->postParameters) $this->postParameters = $this->readPostParameters();
+        return  $this->postParameters ? $this->postParameters : [];
+    }
+
+
+    public function getGetParameters(){
+        if(!$this->getParameters) $this->getParameters = $this->readGetParameters();
+        return  $this->getParameters ? $this->getParameters : [];
+    }
+
+    public function getInputStreamParameters(){
+        return $this->readInputStreamParameters();
+    }
+
+    public function jsonSerialize() {
+        $iArray['statusCode'] = $this->statusCode;
+        $iArray['response'] = $this->response;
+        $iArray['errorMessage'] = $this->errorMessage;
+        return $iArray;
+    }
+
 }
