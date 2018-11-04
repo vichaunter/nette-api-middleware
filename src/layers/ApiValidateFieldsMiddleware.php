@@ -72,8 +72,8 @@ class ApiValidateFieldsMiddleware extends ApiLayer {
             if ($this->ignorableFields) {
                 $this->validateData($this->ignorableFields);
             }
-        } catch (ApiException $ae) {
-            $request->setError(__CLASS__.": ".$ae->getMessage());
+        } catch (\VicHaunter\ApiMiddleware\ApiException $e) {
+            $request->setError(__CLASS__.": ".$e->getMessage());
         }
         
         return $next($request);

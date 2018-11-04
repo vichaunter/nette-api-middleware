@@ -44,7 +44,7 @@ class ApiCheckValidResponseMiddleware extends ApiLayer {
             $hash = !empty($request->response['signature']) ? $request->response['signature'] : null;
             $response = json_decode(json_encode($this->removeNotAllowed($request->getParameters(), $this->ignorableFields)), true);
         } catch (ApiException $ae) {
-            $request->setError(__CLASS__.": Bad response");
+            $request->setError(__CLASS__.": Bad request");
         }
         
         return $next($request);

@@ -3,6 +3,7 @@
 namespace VicHaunter\ApiMiddleware;
 
 use Nette\Application\Request;
+use Nette\Http\Url;
 
 class ApiApplicationRequest implements \JsonSerializable {
     
@@ -16,7 +17,7 @@ class ApiApplicationRequest implements \JsonSerializable {
     //Response part
     private $response = [];
     private $errorMessage = null;
-    private $statusCode = null;
+    private $statusCode = 0;
     
     public function __construct( Request $netteRequest ) {
         $this->netteRequest = $netteRequest;
@@ -89,7 +90,7 @@ class ApiApplicationRequest implements \JsonSerializable {
     }
 
     public function readInputStreamParameters(){
-        if(array_key_exists('CONTENT_TYPE', $_SERVER) && $_SERVER["CONTENT_TYPE"] === 'application/json'){
+        if(array_key_exists('CONTENT_TYPE', $_SERVER) && $_SERVER["CONTENT_TYPE"] === 'application/json') {
             $inputStream = file_get_contents('php://input');
             $this->inputStreamParameters = json_decode($inputStream, true);
         }
