@@ -39,7 +39,7 @@ class ApiLogMiddleware extends ApiLayer {
                     $fileName = $this->nameGenerator($request);
                 }
                 FileSystem::createDir($this->path);
-                FileSystem::write($this->path.'/'.$fileName.'.json', $request->getParameters(), null);
+                FileSystem::write($this->path.'/'.$fileName.'.json', json_encode($request->getParameters()), null);
             } catch (\Exception $e) {
                 $request->error = __CLASS__.": ".$e->getMessage();
             }
