@@ -24,8 +24,9 @@ class ApiApplicationRequest implements \JsonSerializable {
         $this->parameters = $this->getOriginalParameters();
     }
     
-    public function setResponse( $response ) {
+    public function setResponse( $response, $statusCode = 0 ) {
         $this->response = $response;
+        $this->statusCode = $statusCode;
     }
 
     public function getError() {
@@ -74,7 +75,7 @@ class ApiApplicationRequest implements \JsonSerializable {
         return $this->netteRequest;
     }
     
-    public function setError( $errorMessage, $statusCode = 0 ) {
+    public function setError( $errorMessage, $statusCode = 1 ) {
         $this->statusCode = $statusCode;
         $this->errorMessage = $errorMessage;
         

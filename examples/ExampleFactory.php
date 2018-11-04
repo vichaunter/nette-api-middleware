@@ -10,7 +10,7 @@ namespace VicHaunter\ApiMiddleware\Examples;
 
 use VicHaunter\ApiMiddleware\Layers\ApiRequiredFiledsMiddleware;
 use VicHaunter\ApiMiddleware\Model\BaseApiModel;
-use VicHaunter\Middleware\Layers\ApiLogMiddleware;
+use VicHaunter\Middleware\Layers\ApiResponseCodeChecker;
 use VicHaunter\Middleware\Layers\ApiSetAllowedParametersMiddleware;
 use VicHaunter\Middleware\Layers\ApiValidateFieldsMiddleware;
 use VicHaunter\Middleware\Layers\TokenAutheticationMiddleware;
@@ -34,7 +34,7 @@ class ExampleFactory {
         //
         $onion = new \VicHaunter\ApiMiddleware\ApiOnionDecorator([
             new TokenAutheticationMiddleware('tokenCode'),
-            new ApiLogMiddleware(),
+            new ApiResponseCodeChecker(),
             new ApiRequiredFiledsMiddleware($requiredFields),
             new ApiValidateFieldsMiddleware($requiredFields, $ignorableFields),
             new ApiCheckValidResponseMiddleware($ignorableFields),
